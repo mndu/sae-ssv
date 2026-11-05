@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SAE-SSV: Supervised Steering in Sparse Representation Spaces for Reliable Control of Language Models. EMNLP 2025 project page.">
+  <title>SAE-SSV</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <section class="sheet home">
+      <h1>SAE-SSV: Supervised Steering in Sparse Representation Spaces<br class="wide-only"> for Reliable Control of Language Models</h1>
+      <p class="authors">Zirui He<sup>1</sup>, Mingyu Jin<sup>2</sup>, Bo Shen<sup>1</sup>, Ali Payani<sup>3</sup>, Yongfeng Zhang<sup>2</sup>, Mengnan Du<sup>1,*</sup></p>
+      <p class="institutions"><sup>1</sup> New Jersey Institute of Technology, <sup>2</sup> Rutgers University, <sup>3</sup> Cisco</p>
+      <p class="author-note">* Corresponding author</p>
+      <p class="links"><a href="sae-ssv.pdf">[Paper]</a>&nbsp; <a href="https://github.com/Ineedanamehere/SAE-SSV">[Code]</a>&nbsp; <a href="https://aclanthology.org/2025.emnlp-main.112/">[ACL Anthology]</a>&nbsp; <a href="https://arxiv.org/abs/2505.16188">[arXiv]</a></p>
+      <figure class="framework"><a href="assets/framework.png" aria-label="Open the full-size framework figure"><img src="assets/framework.png" width="1644" height="660" alt="SAE-SSV framework: encode model activations with a sparse autoencoder, select task-relevant dimensions using linear probes, and train a steering vector in the selected subspace with alignment, language-modeling, and sparsity losses."></a><figcaption>Figure 1. SAE-SSV selects a task-relevant SAE subspace and optimizes a sparse steering vector within it. Figure from the paper. Select the image to view it full size.</figcaption></figure>
+    </section>
+
+    <section class="sheet" aria-labelledby="overview-title">
+      <h2 id="overview-title">Overview</h2>
+      <div class="body-copy">
+        <p>Steering changes a language model’s internal activations to guide its output without retraining the model. SAE-SSV performs this intervention in a sparse autoencoder (SAE) representation space. It aims to identify a small set of dimensions that are relevant to a target behavior, then use those dimensions to control open-ended generation.</p>
+        <p>The method encodes activations into SAE features and uses supervised linear probes to rank task-relevant dimensions. A steering vector is initialized from positive and negative examples and optimized only within the selected subspace. Its training objective encourages the desired behavior while preserving generation quality and keeping the intervention sparse. The paper evaluates sentiment, political polarity, and truthfulness steering on Llama-3.1-8B and Gemma-2 models.</p>
+      </div>
+    </section>
+
+    <section class="sheet" aria-labelledby="results-title">
+      <h2 id="results-title">Results</h2>
+      <div class="body-copy">
+        <p>Table 1 compares steering success rates with four baselines across three models and three tasks. SAE-SSV achieves the highest reported success rate in each model–task setting. The full paper also reports lexical diversity and entropy changes to assess generation quality.</p>
+        <figure class="result-figure quantitative">
+          <div class="table-scroll" role="region" aria-label="Steering success rate comparison; scroll horizontally on smaller screens" tabindex="0">
+            <table><thead><tr><th scope="col">Model</th><th scope="col">Method</th><th scope="col">Sentiment ↑</th><th scope="col">Politics ↑</th><th scope="col">Truthfulness ↑</th></tr></thead><tbody>
+              <tr><th scope="row">Llama-3.1-8B</th><td>CAA</td><td>45.6</td><td>43.7</td><td>28.7</td></tr>
+              <tr><th scope="row">Llama-3.1-8B</th><td>RePe</td><td>24.7</td><td>26.2</td><td>16.2</td></tr>
+              <tr><th scope="row">Llama-3.1-8B</th><td>Top PC</td><td>28.4</td><td>24.3</td><td>14.9</td></tr>
+              <tr><th scope="row">Llama-3.1-8B</th><td>ITI</td><td>41.1</td><td>45.2</td><td>31.2</td></tr>
+              <tr class="ours"><th scope="row">Llama-3.1-8B</th><td>SAE-SSV</td><td>63.2</td><td>60.5</td><td>34.1</td></tr>
+              <tr><th scope="row">Gemma-2-2B</th><td>CAA</td><td>39.6</td><td>45.4</td><td>24.6</td></tr>
+              <tr><th scope="row">Gemma-2-2B</th><td>RePe</td><td>27.2</td><td>36.6</td><td>11.6</td></tr>
+              <tr><th scope="row">Gemma-2-2B</th><td>Top PC</td><td>23.8</td><td>35.0</td><td>12.2</td></tr>
+              <tr><th scope="row">Gemma-2-2B</th><td>ITI</td><td>41.2</td><td>42.1</td><td>22.3</td></tr>
+              <tr class="ours"><th scope="row">Gemma-2-2B</th><td>SAE-SSV</td><td>52.8</td><td>61.3</td><td>31.7</td></tr>
+              <tr><th scope="row">Gemma-2-9B</th><td>CAA</td><td>42.3</td><td>39.3</td><td>19.8</td></tr>
+              <tr><th scope="row">Gemma-2-9B</th><td>RePe</td><td>19.7</td><td>22.4</td><td>9.2</td></tr>
+              <tr><th scope="row">Gemma-2-9B</th><td>Top PC</td><td>21.4</td><td>29.1</td><td>10.6</td></tr>
+              <tr><th scope="row">Gemma-2-9B</th><td>ITI</td><td>41.2</td><td>33.8</td><td>21.4</td></tr>
+              <tr class="ours"><th scope="row">Gemma-2-9B</th><td>SAE-SSV</td><td>48.5</td><td>55.0</td><td>27.2</td></tr>
+            </tbody></table>
+          </div>
+          <figcaption>Table 1. Steering success rate (SR, %) across model and task settings; higher is better. This view shows SR columns from the published table.</figcaption>
+        </figure>
+        <h3>Interpretable Steering Features</h3>
+        <p>Table 2 lists the ten SAE features with the largest learned weights in the sentiment steering vector for Llama-3.1-8B. Feature descriptions come from Neuronpedia; positive and negative values indicate the direction of each learned steering weight.</p>
+        <figure class="result-figure quantitative">
+          <div class="table-scroll" role="region" aria-label="Top ten sentiment steering features; scroll horizontally on smaller screens" tabindex="0">
+            <table><thead><tr><th scope="col">Rank</th><th scope="col">Feature explanation</th><th scope="col">SAE feature #</th><th scope="col">Weight</th></tr></thead><tbody>
+              <tr><th scope="row">1</th><td>Negative sentiments towards characters in movies</td><td>2305</td><td>−6.76</td></tr>
+              <tr><th scope="row">2</th><td>Negative sentiments and criticisms related to performance or quality</td><td>14086</td><td>−3.24</td></tr>
+              <tr><th scope="row">3</th><td>Phrases related to notable achievements in the entertainment industry</td><td>12322</td><td>2.79</td></tr>
+              <tr><th scope="row">4</th><td>Punctuation and symbols indicative of structural elements in text</td><td>20767</td><td>2.32</td></tr>
+              <tr><th scope="row">5</th><td>Mentions of achievements and recognition in a professional context</td><td>28857</td><td>1.99</td></tr>
+              <tr><th scope="row">6</th><td>Phrases and terminology related to legal injunctions and restrictions</td><td>2268</td><td>−1.89</td></tr>
+              <tr><th scope="row">7</th><td>Components related to specific abilities or skills in performance</td><td>29039</td><td>−1.86</td></tr>
+              <tr><th scope="row">8</th><td>References to historical or legendary figures and events</td><td>28858</td><td>−1.68</td></tr>
+              <tr><th scope="row">9</th><td>Phrases indicating misinformation, contradictions, or inaccuracies</td><td>14391</td><td>−1.46</td></tr>
+              <tr><th scope="row">10</th><td>Questions and expressions of disappointment or concern</td><td>13758</td><td>−1.43</td></tr>
+            </tbody></table>
+          </div>
+          <figcaption>Table 2. Top-ten SAE features in the sentiment steering vector for Llama-3.1-8B. Explanations and weights reproduce the published table.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="sheet bib-sheet" aria-labelledby="bibtex-title">
+      <h2 id="bibtex-title">BibTeX</h2>
+      <pre><code>@inproceedings{he-etal-2025-sae,
+  title     = {{SAE}-{SSV}: Supervised Steering in Sparse Representation Spaces for Reliable Control of Language Models},
+  author    = {He, Zirui and Jin, Mingyu and Shen, Bo and Payani, Ali and Zhang, Yongfeng and Du, Mengnan},
+  booktitle = {Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing},
+  pages     = {2207--2236},
+  year      = {2025},
+  publisher = {Association for Computational Linguistics},
+  doi       = {10.18653/v1/2025.emnlp-main.112},
+  url       = {https://aclanthology.org/2025.emnlp-main.112/}
+}</code></pre>
+    </section>
+  </main>
+</body>
+</html>
